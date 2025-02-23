@@ -71,6 +71,11 @@ public class ConexionYValidacion {
         }
         
         
+        
+        public boolean seConecto() {
+            return true;
+        }
+        
 
         //18 de febrero 2025: Ahora se crea el mensaje por separado, debido a que la conexion se da instantáneamente.
         public boolean construirMensaje(String remitente, ArrayList<String> destinatarios, String subject, String content) {
