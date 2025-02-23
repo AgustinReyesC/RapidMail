@@ -97,7 +97,12 @@ public class ConexionYValidacion {
         return true;
     }
       
-          
+       
+        
+        public boolean prueba() {
+            return true;
+        }
+        
     //Método para generar estructura del archivo si es que tiene archivo o no 
     //18 de febrero 2025: Ahora tambien verifica que el mensaje esté encriptado con el método creado
     public Multipart armarMensaje(String content) throws MessagingException, IOException {
