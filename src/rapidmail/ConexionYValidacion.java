@@ -36,6 +36,7 @@ import javax.swing.JOptionPane;
  * @author gutyc
  */
 
+//Ahora si se supone que este comentario se tiene que guardar
 
 public class ConexionYValidacion {
         
