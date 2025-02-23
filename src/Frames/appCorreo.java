@@ -11,6 +11,8 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +21,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -91,6 +95,14 @@ public class appCorreo extends javax.swing.JFrame {
         
         //18 de febrero 2025:
         cyv = new ConexionYValidacion(LOGIN.getRemitente(), LOGIN.getClave());
+        
+        // 23 de febrero 2025: 1:27 am. Se encarga de cerrar la conexión cuando se cierra la aplicación.
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                cyv.cerrarConexion(); 
+            }
+        });
     }
 
     /**
@@ -514,7 +526,15 @@ public class appCorreo extends javax.swing.JFrame {
         //18 de febrero 2025. 2:15 pm : Si todos están validados, se manda el mensaje a cada uno.
         if(flag){
             if(cyv.construirMensaje(LOGIN.getRemitente(), destinatarios, textAsunto.getText(), textMensaje.getText())){
-                cyv.enviarMensaje();
+                
+                //23 de febrero 2025: 12:35 am Se llama al executor para enviar el mensaje en segundo plano, sin bloquear la aplicación.
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                
+                executor.submit(() -> {
+                    cyv.enviarMensaje();
+                    executor.shutdown();
+                });
+
                 JOptionPane.showMessageDialog(null, "Correo enviado con éxito!");
                 borrarTodo();
             }
