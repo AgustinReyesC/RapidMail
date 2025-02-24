@@ -22,8 +22,6 @@ public class LOGIN extends javax.swing.JFrame {
     
     public LOGIN() {
         initComponents();
-        this.textRemitente.setText("javamailtest385@gmail.com");//TODO
-        this.clave.setText("gqqj igby jupw inqj");
         this.setLocationRelativeTo(null);
     }
 

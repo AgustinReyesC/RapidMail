@@ -26,9 +26,9 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
         initComponents();
         //pongo los que son faciles de poner (destinatario y asunto)
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.destinatariosTable.setRowHeight(50);
-        this.adjuntosTable.setRowHeight(50);
-        
+        this.destinatariosTable.setRowHeight(20);
+        this.adjuntosTable.setRowHeight(20);
+
         
         this.asuntoLabel.setText(asunto);
         for (String destinatario : destinatarios) {
@@ -84,7 +84,6 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         destinatariosTable = new javax.swing.JTable();
-        asuntoSoloParaUILabel = new javax.swing.JLabel();
         asuntoLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         contenidoTextArea = new javax.swing.JTextArea();
@@ -117,10 +116,9 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        destinatariosTable.setFocusable(false);
+        destinatariosTable.setRowSelectionAllowed(false);
         jScrollPane1.setViewportView(destinatariosTable);
-
-        asuntoSoloParaUILabel.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
-        asuntoSoloParaUILabel.setText("Asunto:");
 
         asuntoLabel.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
         asuntoLabel.setText(".");
@@ -131,7 +129,7 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
         contenidoTextArea.setRows(5);
         jScrollPane2.setViewportView(contenidoTextArea);
 
-        adjuntosTable.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
+        adjuntosTable.setFont(new java.awt.Font("Gill Sans MT", 0, 14)); // NOI18N
         adjuntosTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -155,6 +153,8 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        adjuntosTable.setFocusable(false);
+        adjuntosTable.setRowSelectionAllowed(false);
         jScrollPane3.setViewportView(adjuntosTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -164,35 +164,28 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(asuntoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(asuntoSoloParaUILabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(asuntoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(asuntoSoloParaUILabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(asuntoLabel)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -206,7 +199,6 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable adjuntosTable;
     private javax.swing.JLabel asuntoLabel;
-    private javax.swing.JLabel asuntoSoloParaUILabel;
     private javax.swing.JTextArea contenidoTextArea;
     private javax.swing.JTable destinatariosTable;
     private javax.swing.JScrollPane jScrollPane1;

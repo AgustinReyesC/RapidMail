@@ -663,6 +663,7 @@ public class appCorreo extends javax.swing.JFrame {
         //creo el otro frame y le doy la info de los mensajes
         enviadosFrame enviadosF = new enviadosFrame(mensajes);
         enviadosF.setVisible(true);
+        enviadosF.setLocationRelativeTo(rootPane);
         
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);

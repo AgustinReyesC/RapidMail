@@ -42,6 +42,7 @@ public class enviadosFrame extends javax.swing.JFrame {
         initComponents();
         this.mensajes =  mensajes;
         areasDeMensajes = new ArrayList<>();
+        scrollPaneEnviados.getVerticalScrollBar().setUnitIncrement(20);
         
         panelEnviados.setLayout(new BoxLayout(panelEnviados, BoxLayout.Y_AXIS));//para que se expandan las textAreas
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -99,6 +100,7 @@ public class enviadosFrame extends javax.swing.JFrame {
                         unCorreoEnviadoFrame frameDeCurrCorreo = new unCorreoEnviadoFrame(currMensaje.getSubject(), destinatarios,
                                 currMensaje.getContent(), currMensaje.isMimeType("text/*"));
                         frameDeCurrCorreo.setVisible(true);
+                        frameDeCurrCorreo.setLocationRelativeTo(rootPane);
                     } catch (MessagingException ex) {
                         Logger.getLogger(enviadosFrame.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -108,7 +110,7 @@ public class enviadosFrame extends javax.swing.JFrame {
             });
             
             currArea.setEditable(false);
-            currArea.setFont(new Font("Gill Sans Mt", Font.PLAIN, 18));
+            currArea.setFont(new Font("Gill Sans Mt", Font.PLAIN, 14));
             //añado el panel
             panelEnviados.add(currArea);
             areasDeMensajes.add(currArea);
@@ -172,11 +174,3 @@ public class enviadosFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollPaneEnviados;
     // End of variables declaration//GEN-END:variables
 }
-
-//                System.out.println("Bcc User Name: "+InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC)));
-//                System.out.println("SENT DATE: "+m.getSentDate());
-//                System.out.println("SUBJECT: "+m.getSubject());
-//System.out.println("Content: "+bp.getContent());
-//System.out.println("Content:" + content);
-                //creo el texArea de current message y lo añado
- //System.out.println("TextArea " + (areasDeMensajes.indexOf(currArea) + 1) + " clicked!");
