@@ -22,6 +22,7 @@ public class LOGIN extends javax.swing.JFrame {
     
     public LOGIN() {
         initComponents();
+        
         this.setLocationRelativeTo(null);
     }
 

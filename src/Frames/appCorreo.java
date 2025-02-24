@@ -4,7 +4,6 @@
  */
 package Frames;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -21,21 +20,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
-import java.util.Properties;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Address;
-import javax.mail.BodyPart;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.internet.InternetAddress;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,7 +34,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import rapidmail.ConexionYValidacion;
 import rapidmail.FuncionesLogin;
 
-
 /**
  *
  * @author gutyc
@@ -53,65 +41,55 @@ import rapidmail.FuncionesLogin;
 public class appCorreo extends javax.swing.JFrame {
 
     private static JLabel imageLabel;
-    
+
     int archivosPermitidos;
     int megasPermitidos;
-    
+
     JLabel[] basArray;
-    
+
     private static ArrayList<File> archivos = new ArrayList<>();
     static ArrayList<String> destinatarios;
 
     //18 de febrero 2025: Cambios en las funciones de clase ConexionYValidacion.
     private ConexionYValidacion cyv;
-    
-    
-    
-    
-    
-    
-    
-    
+
     /**
      * Creates new form appCorreo
      */
     public appCorreo() {
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
-        
+
         imageLabel = new JLabel();
 
-        
         bas1.setVisible(false);
         bas2.setVisible(false);
         bas3.setVisible(false);
-        
-        
+
         basArray = new JLabel[3];
         basArray[0] = bas1;
         basArray[1] = bas2;
         basArray[2] = bas3;
-        
-        
+
         archivosPermitidos = 3;
         megasPermitidos = 20;
-        
+
         listaArchivos.setAutoscrolls(false);
-        
-        textMensaje.setLineWrap(true); 
-        textMensaje.setWrapStyleWord(true); 
-        
+
+        textMensaje.setLineWrap(true);
+        textMensaje.setWrapStyleWord(true);
+
         destinatarios = new ArrayList<>();
-        
+
         //18 de febrero 2025:
         cyv = new ConexionYValidacion(LOGIN.getRemitente(), LOGIN.getClave());
-        
+
         // 23 de febrero 2025: 1:27 am. Se encarga de cerrar la conexión cuando se cierra la aplicación.
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                cyv.cerrarConexion(); 
+                cyv.cerrarConexion();
             }
         });
     }
@@ -148,7 +126,7 @@ public class appCorreo extends javax.swing.JFrame {
         actualizarCorreos = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         tamañoDelArchivo = new javax.swing.JLabel();
-        botonEnviados = new javax.swing.JButton();
+        lblEstadoCopia = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
@@ -223,14 +201,14 @@ public class appCorreo extends javax.swing.JFrame {
                             .addComponent(bas2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bas3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                        .addGap(39, 39, 39)
                         .addComponent(botonEnviarArchivos, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(botonEnviarArchivos, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,9 +217,8 @@ public class appCorreo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bas2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bas3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                        .addComponent(bas3))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -326,47 +303,42 @@ public class appCorreo extends javax.swing.JFrame {
         tamañoDelArchivo.setBackground(new java.awt.Color(204, 204, 204));
         tamañoDelArchivo.setOpaque(true);
 
-        botonEnviados.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
-        botonEnviados.setText("Enviados");
-        botonEnviados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEnviadosActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botonMasDestinatarios, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(actualizarCorreos))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(botonMasDestinatarios, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(actualizarCorreos))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textDestinatarios, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(textAsunto, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(basAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(basDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(381, 381, 381))))
+                                .addComponent(lblEstadoCopia, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textDestinatarios)
+                            .addComponent(textAsunto))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(basAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(basDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(381, 381, 381))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,14 +350,7 @@ public class appCorreo extends javax.swing.JFrame {
                                         .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(botonBorrarTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(8, 8, 8))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(40, 40, 40))
-                                    .addComponent(botonEnviados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGap(8, 8, 8)))))
                         .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -399,9 +364,7 @@ public class appCorreo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(botonEnviados, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(21, 21, 21)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -409,7 +372,7 @@ public class appCorreo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(tamañoDelArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 49, Short.MAX_VALUE))
+                        .addGap(0, 53, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -422,7 +385,9 @@ public class appCorreo extends javax.swing.JFrame {
                             .addComponent(textDestinatarios, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(basDestinatario))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(lblEstadoCopia))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,36 +414,34 @@ public class appCorreo extends javax.swing.JFrame {
         fileDialog.setVisible(true);
 
         File[] files = fileDialog.getFiles(); // Obtener archivos seleccionados
-        
 
         boolean permitido = false;
-        
-        if(validarExtensiones(files)){
-            if(validarPeso(files)){
-                if(validarNumeroDeArchivos(files)){
+
+        if (validarExtensiones(files)) {
+            if (validarPeso(files)) {
+                if (validarNumeroDeArchivos(files)) {
                     permitido = true;
                 }
             }
         }
-        
-        if(permitido){
-            archivos.addAll(Arrays.asList(files)); 
+
+        if (permitido) {
+            archivos.addAll(Arrays.asList(files));
         }
         actualizarListView();
     }//GEN-LAST:event_botonEnviarArchivosActionPerformed
 
-    
     private boolean validarExtensiones(File[] files) {
-        
+
         //Array de extensiones generado por chatGPT
         String[] extensionesPermitidas = {
-        "png", "jpg", "jpeg", "gif", "bmp", "tiff", "svg", "pptx", 
-        "zip", "rar", "tar", "7z", "gz", 
-        "mp4", "mkv", "avi", "mov", "wmv", "flv", 
-        "pdf", "doc", "docx", "txt", "rtf", "odt", "xls", "xlsx"
-    };
-    
-        for(File file : files) {
+            "png", "jpg", "jpeg", "gif", "bmp", "tiff", "svg", "pptx",
+            "zip", "rar", "tar", "7z", "gz",
+            "mp4", "mkv", "avi", "mov", "wmv", "flv",
+            "pdf", "doc", "docx", "txt", "rtf", "odt", "xls", "xlsx"
+        };
+
+        for (File file : files) {
             String nombre = file.getName();
             String extension = nombre.substring(nombre.lastIndexOf('.') + 1);
 
@@ -492,78 +455,133 @@ public class appCorreo extends javax.swing.JFrame {
 
             if (!esValida) {
                 JOptionPane.showMessageDialog(null, "La siguiente extensión de archivo no es válida: " + extension);
-                return false; 
+                return false;
             }
         }
         return true;
     }
-    
+
     private boolean validarPeso(File[] files) {
-        for(File file : files) {
-            if(file.length() > megasPermitidos * 1024 * 1024){ //20mb
+        for (File file : files) {
+            if (file.length() > megasPermitidos * 1024 * 1024) { //20mb
                 JOptionPane.showMessageDialog(null, "Lo siento, no se permiten archivos mayores a " + megasPermitidos + "Mb");
                 return false;
             }
         }
         return true;
     }
-    
+
     private boolean validarNumeroDeArchivos(File[] files) {
         if (files.length + listaArchivos.getModel().getSize() > archivosPermitidos) {
-                JOptionPane.showMessageDialog(null, "Lo siento, no es posible enviar más de 3 archivos por correo");
-                return false;
+            JOptionPane.showMessageDialog(null, "Lo siento, no es posible enviar más de 3 archivos por correo");
+            return false;
         }
         return true;
     }
-    
-    
-    private void actualizarListView() {
-            //Estructura de array de Strings sugerida por chatGPT
-            String[] nombresArchivos = archivos.stream().map(File::getName).toArray(String[]::new);
-            listaArchivos.setListData(nombresArchivos);
-            
-            for(int i = 0; i < archivosPermitidos; i++) {
-                if(i < archivos.size()) {
-                    basArray[i].setVisible(true);
-                } else {
-                    basArray[i].setVisible(false);
-                }
-            }
-      
-    }
 
-    
-    
-    
-    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
-        
-        destinatarios.addAll(asList(textDestinatarios.getText().split(", ")));
-        
-        //Se validan cada uno de los destinatarios
-        boolean flag = true;
-        for(String des: destinatarios) {
-            if(!FuncionesLogin.validarCorreo(des)){
-                flag = false;
-                break;
+    private void actualizarListView() {
+        //Estructura de array de Strings sugerida por chatGPT
+        String[] nombresArchivos = archivos.stream().map(File::getName).toArray(String[]::new);
+        listaArchivos.setListData(nombresArchivos);
+
+        for (int i = 0; i < archivosPermitidos; i++) {
+            if (i < archivos.size()) {
+                basArray[i].setVisible(true);
+            } else {
+                basArray[i].setVisible(false);
             }
         }
-        
-        
-        //18 de febrero 2025. 2:15 pm : Si todos están validados, se manda el mensaje a cada uno.
-        if(flag){
-            if(cyv.construirMensaje(LOGIN.getRemitente(), destinatarios, textAsunto.getText(), textMensaje.getText())){
-                
-                //23 de febrero 2025: 12:35 am Se llama al executor para enviar el mensaje en segundo plano, sin bloquear la aplicación.
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                
-                executor.submit(() -> {
-                    cyv.enviarMensaje();
-                    executor.shutdown();
-                });
 
-                JOptionPane.showMessageDialog(null, "Correo enviado con éxito!");
-                borrarTodo();
+    }
+
+
+    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
+        // 1. Obtener el contenido y eliminar espacios
+        String destText = textDestinatarios.getText().trim();
+        String copyPrefix = "";
+
+        // 2. Detectar y eliminar el prefijo "CC: " o "CCO: "
+        if (destText.startsWith("CC: ")) {
+            copyPrefix = "CC";
+            destText = destText.substring(4).trim();
+        } else if (destText.startsWith("CCO: ")) {
+            copyPrefix = "CCO";
+            destText = destText.substring(5).trim();
+        }
+
+        // 3. Separar las direcciones por comas (eliminando espacios extra)
+        String[] emailsArray = destText.split("\\s*,\\s*");
+        List<String> emailsList = Arrays.asList(emailsArray);
+        // Convertir a ArrayList para que coincida con el tipo de parámetro que espera construirMensaje
+        ArrayList<String> emails = new ArrayList<>(emailsList);
+
+        // 4. Validar que se haya ingresado al menos una dirección
+        if (emails.isEmpty() || emails.get(0).isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No se han ingresado direcciones de correo válidas.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 5. Validar cada dirección
+        for (String email : emails) {
+            if (!FuncionesLogin.validarCorreo(email)) {
+                JOptionPane.showMessageDialog(this,
+                        "La dirección de correo '" + email + "' no es válida.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
             }
+        }
+
+        boolean mensajeConstruido = false;
+
+        // 6. Construir el mensaje según el número de destinatarios.
+        if (emails.size() == 1) {
+            // Caso para único destinatario.
+            mensajeConstruido = cyv.construirMensaje(
+                    LOGIN.getRemitente(),
+                    emails,
+                    textAsunto.getText(),
+                    textMensaje.getText());
+        } else {
+            // Para dos o más destinatarios se requiere que se haya especificado CC o CCO.
+            if (copyPrefix.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Para múltiples destinatarios, selecciona CC o CCO.",
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Tomamos el primer correo como destinatario principal
+            ArrayList<String> mainRecipient = new ArrayList<>();
+            mainRecipient.add(emails.get(0));
+            mensajeConstruido = cyv.construirMensaje(
+                    LOGIN.getRemitente(),
+                    mainRecipient,
+                    textAsunto.getText(),
+                    textMensaje.getText());
+
+            // Los destinatarios restantes se agregan como copia
+            ArrayList<String> copyRecipients = new ArrayList<>(emails.subList(1, emails.size()));
+            if (copyPrefix.equals("CC")) {
+                cyv.anadirCC(copyRecipients);
+            } else if (copyPrefix.equals("CCO")) {
+                cyv.anadirBCC(copyRecipients);
+            }
+        }
+
+        // 7. Si el mensaje se construyó correctamente, se envía en un hilo separado.
+        if (mensajeConstruido) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(() -> {
+                cyv.enviarMensaje();
+                executor.shutdown();
+            });
+            JOptionPane.showMessageDialog(this, "¡Correo enviado con éxito!");
+            borrarTodo();
         }
     }//GEN-LAST:event_botonEnviarActionPerformed
 
@@ -587,14 +605,14 @@ public class appCorreo extends javax.swing.JFrame {
     }//GEN-LAST:event_bas1MouseClicked
 
     private void bas2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bas2MouseClicked
-       archivos.remove(1);
+        archivos.remove(1);
         actualizarListView();
-       limpiarPanelVisualizacion();
-       tamañoDelArchivo.setText("");
+        limpiarPanelVisualizacion();
+        tamañoDelArchivo.setText("");
     }//GEN-LAST:event_bas2MouseClicked
 
     private void bas3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bas3MouseClicked
-       archivos.remove(2);
+        archivos.remove(2);
         actualizarListView();
         limpiarPanelVisualizacion();
         tamañoDelArchivo.setText("");
@@ -608,47 +626,48 @@ public class appCorreo extends javax.swing.JFrame {
     private void botonMasDestinatariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonMasDestinatariosMouseClicked
         destinatarios.clear();
         destinatarios.addAll(asList(textDestinatarios.getText().split(", ")));
-        CorreosAEnviar corr = new CorreosAEnviar();
-        
+        CorreosAEnviar corr = new CorreosAEnviar(this);
+
         corr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         corr.setVisible(true);
     }//GEN-LAST:event_botonMasDestinatariosMouseClicked
 
     private void actualizarCorreosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarCorreosActionPerformed
         String destin = "";
-            for(int i = 0; i < destinatarios.size(); i++) {
-                if(i < destinatarios.size()-1) {
-                    destin += destinatarios.get(i) + ", ";
-                } else {
-                    destin+= destinatarios.get(i);
-                }
+        for (int i = 0; i < destinatarios.size(); i++) {
+            if (i < destinatarios.size() - 1) {
+                destin += destinatarios.get(i) + ", ";
+            } else {
+                destin += destinatarios.get(i);
             }
-            
-            textDestinatarios.setText(destin);
+        }
+
+        textDestinatarios.setText(destin);
     }//GEN-LAST:event_actualizarCorreosActionPerformed
 
     private void listaArchivosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaArchivosValueChanged
-        
+
         int numeroArchivo = listaArchivos.getSelectedIndex();
-        if (numeroArchivo == -1) return;
-        
+        if (numeroArchivo == -1) {
+            return;
+        }
+
         DecimalFormat formato = new DecimalFormat("#.###");
         tamañoDelArchivo.setText(formato.format(archivos.get(numeroArchivo).length() / 1024.0) + " Kb");
-        
+
         String nombreArchivo = archivos.get(numeroArchivo).getName();
-        
-        if(!"pdf".equals(nombreArchivo.substring(nombreArchivo.lastIndexOf('.') + 1))){ 
+
+        if (!"pdf".equals(nombreArchivo.substring(nombreArchivo.lastIndexOf('.') + 1))) {
             limpiarPanelVisualizacion();
             panelVisualizacion.setLayout(new BorderLayout());
-            
+
             //uso se SwingConstants y BorderLayout sugerido por chatGPT
             panelVisualizacion.add(new JLabel("Sin Visualizacion Previa", SwingConstants.CENTER), BorderLayout.CENTER);
             return;
         }
-        
-        
+
         String selectedFile = archivos.get(numeroArchivo).getAbsolutePath();
-        
+
         if (selectedFile != null) {
             renderPDF(selectedFile);
         }
@@ -658,94 +677,51 @@ public class appCorreo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textDestinatariosActionPerformed
 
-    private void botonEnviadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviadosActionPerformed
-        
-        //código conseguido de https://es.stackoverflow.com/questions/59000/como-leer-los-correos-enviados-desde-gmail-utilizando-javamail?utm_source=chatgpt.com
-        //inicializo las properties para conseguir los correos enviados
-        Properties p = new Properties();
-        p.setProperty("mail.store.protocol", "imaps");
-        Session sesion = Session.getInstance(p);
-        sesion.setDebug(false);//TODO
-        
-        //hago el store
-        Store store = null;
-        try {
-            store = sesion.getStore();
-            store.connect("imap.gmail.com", LOGIN.getRemitente(), LOGIN.getClave());
-        
-        //consigo la carpeta de enviados
-        Folder folder = store.getFolder("[Gmail]/Sent Mail");
-        folder.open(Folder.READ_ONLY);
-        
-        //consigo todos los mensajes
-        Message[] mensajes = folder.getMessages();
-        
-        //creo el otro frame y le doy la info de los mensajes
-        enviadosFrame enviadosF = new enviadosFrame(mensajes);
-        enviadosF.setVisible(true);
-        enviadosF.setLocationRelativeTo(rootPane);
-        
-        } catch (NoSuchProviderException ex) {
-            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MessagingException ex) {
-            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        
-    }//GEN-LAST:event_botonEnviadosActionPerformed
-    
     public void limpiarPanelVisualizacion() {
-            panelVisualizacion.removeAll();
+        panelVisualizacion.removeAll();
 
-            panelVisualizacion.setPreferredSize(new Dimension(panelVisualizacion.getWidth(), panelVisualizacion.getHeight()));
+        panelVisualizacion.setPreferredSize(new Dimension(panelVisualizacion.getWidth(), panelVisualizacion.getHeight()));
 
-            panelVisualizacion.revalidate();
-            panelVisualizacion.repaint();
+        panelVisualizacion.revalidate();
+        panelVisualizacion.repaint();
     }
-    
-    
-      public void renderPDF(String filePath) {
-        try {  
+
+    public void renderPDF(String filePath) {
+        try {
             File file = new File(filePath);
             if (!file.exists() || file.length() == 0) {
                 JOptionPane.showMessageDialog(null, "El archivo PDF no existe o está vacío.");
                 return;
             }
 
-           //uso de PDDocument, PDFRenderer y BufferedImage sugerido de chatGPT    
+            //uso de PDDocument, PDFRenderer y BufferedImage sugerido de chatGPT    
             PDDocument document = PDDocument.load(file);
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             BufferedImage image = pdfRenderer.renderImageWithDPI(0, 300);
             document.close();
-            
-            
+
             int panelWidth = panelVisualizacion.getWidth();
             int panelHeight = panelVisualizacion.getHeight();
-            
+
             BufferedImage scaledImage = smoothScale(image, panelWidth, panelHeight);
 
-             
             imageLabel.setIcon(new ImageIcon(scaledImage));
-            
 
-            panelVisualizacion.removeAll(); 
+            panelVisualizacion.removeAll();
             panelVisualizacion.setLayout(new BorderLayout());
             panelVisualizacion.add(imageLabel, BorderLayout.CENTER);
             panelVisualizacion.revalidate();
             panelVisualizacion.repaint();
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-   
-      
-      //Método smoothScale implementado por chatGPT, con ciertos ajustes para introducir un método más con interpolación bicúbica
+
+    //Método smoothScale implementado por chatGPT, con ciertos ajustes para introducir un método más con interpolación bicúbica
     private BufferedImage smoothScale(BufferedImage img, int anchoDeseado, int largoDeseado) {
         int currentWidth = img.getWidth();
         int currentHeight = img.getHeight();
@@ -764,8 +740,6 @@ public class appCorreo extends javax.swing.JFrame {
         return imgMasChica;
     }
 
-    
-    
     // Método de escalamiento bicúbico, idea obtenida de chatGPT.
     private BufferedImage resizeImage(BufferedImage original, int width, int height) {
         BufferedImage imagenFinal = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -782,14 +756,11 @@ public class appCorreo extends javax.swing.JFrame {
 
         return imagenFinal;
     }
-      
-      
-    
+
     public static ArrayList<File> getArchivos() {
         return archivos;
     }
-    
-        
+
     public void borrarTodo() {
         textAsunto.setText("");
         textMensaje.setText("");
@@ -797,21 +768,26 @@ public class appCorreo extends javax.swing.JFrame {
         actualizarListView();
         limpiarPanelVisualizacion();
         tamañoDelArchivo.setText("");
+        
+        lblEstadoCopia.setText(null);
     }
-    
-    
+
     public static ArrayList<String> getDestinatarios() {
         return destinatarios;
     }
-    
+
     public static void setDestinatarios(ArrayList<String> des) {
         destinatarios = new ArrayList<>(des);
     }
-    
+
     public void setlabdes(String des) {
         textDestinatarios.setText(des);
     }
-    
+
+    public void setEstadoCopia(String estado) {
+        lblEstadoCopia.setText(estado);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -856,7 +832,6 @@ public class appCorreo extends javax.swing.JFrame {
     private javax.swing.JLabel basDestinatario;
     private javax.swing.JLabel basMensaje;
     private javax.swing.JButton botonBorrarTodo;
-    private javax.swing.JButton botonEnviados;
     private javax.swing.JButton botonEnviar;
     private javax.swing.JButton botonEnviarArchivos;
     private javax.swing.JLabel botonMasDestinatarios;
@@ -866,6 +841,7 @@ public class appCorreo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblEstadoCopia;
     private javax.swing.JList<String> listaArchivos;
     private javax.swing.JPanel panelVisualizacion;
     private javax.swing.JLabel tamañoDelArchivo;

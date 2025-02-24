@@ -13,29 +13,47 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author gutyc
  */
-
 public class CorreosAEnviar extends javax.swing.JFrame {
-    
+
     ArrayList<String> destinatarios;
-    
+    private appCorreo mainFrame;
+
     /**
      * Creates new form CorreosAEnviar
      */
-    
-    public CorreosAEnviar() {
+    public CorreosAEnviar(appCorreo parent) {
         initComponents();
-        
+
+        this.mainFrame = parent;
+
         tablaCorreos.getColumnModel().getColumn(0).setMaxWidth(100);
-        
+
         destinatarios = new ArrayList<>(appCorreo.getDestinatarios());
         spinerCorreos.setValue(destinatarios.size());
-        
-      
+
         DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
-        
+
         modelo.setRowCount(destinatarios.size());
-        for(int i = 0; i < destinatarios.size(); i++) {
-            modelo.setValueAt(i+1, i, 0);
+        for (int i = 0; i < destinatarios.size(); i++) {
+            modelo.setValueAt(i + 1, i, 0);
+            modelo.setValueAt(destinatarios.get(i), i, 1);
+        }
+
+    }
+
+    public CorreosAEnviar() {
+        initComponents();
+
+        tablaCorreos.getColumnModel().getColumn(0).setMaxWidth(100);
+
+        destinatarios = new ArrayList<>(appCorreo.getDestinatarios());
+        spinerCorreos.setValue(destinatarios.size());
+
+        DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
+
+        modelo.setRowCount(destinatarios.size());
+        for (int i = 0; i < destinatarios.size(); i++) {
+            modelo.setValueAt(i + 1, i, 0);
             modelo.setValueAt(destinatarios.get(i), i, 1);
         }
     }
@@ -49,6 +67,7 @@ public class CorreosAEnviar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         botonListoCorreos = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCorreos = new javax.swing.JTable();
@@ -58,6 +77,8 @@ public class CorreosAEnviar extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         CorreoAEliminar = new javax.swing.JTextField();
         botonEliminarCorreo = new javax.swing.JButton();
+        btnCC = new javax.swing.JRadioButton();
+        btnCCO = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,6 +155,22 @@ public class CorreosAEnviar extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(btnCC);
+        btnCC.setText("CC");
+        btnCC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCCActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(btnCCO);
+        btnCCO.setText("CCO");
+        btnCCO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCCOActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,7 +195,12 @@ public class CorreosAEnviar extends javax.swing.JFrame {
                             .addComponent(CorreoAEliminar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(botonEliminarCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(34, 34, 34)
-                        .addComponent(botonListoCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(botonListoCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCC, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCCO, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -176,14 +218,17 @@ public class CorreosAEnviar extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(CorreoAEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botonEliminarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(CorreoAEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(botonListoCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonEliminarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCC)
+                    .addComponent(btnCCO))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -191,37 +236,92 @@ public class CorreosAEnviar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonListoCorreosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonListoCorreosActionPerformed
+        // Actualizar la lista de destinatarios leyendo la tabla,
+        // para asegurarnos de recoger todos los correos ingresados en la columna "correo"
+        DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
+        destinatarios.clear();
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Object correoObj = modelo.getValueAt(i, 1);  // Suponiendo que la columna 1 es "correo"
+            if (correoObj != null) {
+                String correo = correoObj.toString().trim();
+                if (!correo.isEmpty()) {
+                    destinatarios.add(correo);
+                }
+            }
+        }
+
+        // Si hay 2 o más correos se debe haber seleccionado CC o CCO
+        if (destinatarios.size() >= 2 && (!btnCC.isSelected() && !btnCCO.isSelected())) {
+            JOptionPane.showMessageDialog(this,
+                    "Para 2 o más correos, debes seleccionar CC o CCO.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return; // Se detiene la ejecución hasta que se cumpla la condición
+        }
+
+        // Si se seleccionó CCO, mostrar la advertencia adicional
+        if (btnCCO.isSelected()) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "ADVERTENCIA, EL PRIMER DESTINATARIO SERA VISIBLE PARA TODOS LOS DEMAS",
+                    "Advertencia",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm != JOptionPane.OK_OPTION) {
+                return;
+            }
+        }
+
+        // Construir el string de correos separados por comas
+        String correosConcatenados = String.join(", ", destinatarios);
+
+        // Obtener el prefijo del tipo de copia en función del radio button seleccionado
+        String copyPrefix = "";
+        if (btnCC.isSelected()) {
+            copyPrefix = "CC: ";
+        } else if (btnCCO.isSelected()) {
+            copyPrefix = "CCO: ";
+        }
+
+        // Concatenar y actualizar el textDestinatarios en el frame principal
+        mainFrame.setlabdes(copyPrefix + correosConcatenados);
+
+        // Actualizar la lista en appCorreo
         appCorreo.setDestinatarios(destinatarios);
         this.dispose();
     }//GEN-LAST:event_botonListoCorreosActionPerformed
 
     private void botonEliminarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCorreoActionPerformed
         try {
-            int numAEliminar = Integer.parseInt(CorreoAEliminar.getText())-1;
-            destinatarios.remove(numAEliminar);    
+            int numAEliminar = Integer.parseInt(CorreoAEliminar.getText()) - 1;
+            destinatarios.remove(numAEliminar);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Por favor, introduce un número de correo");
         }
-        actualizarTabla();  
+        actualizarTabla();
     }//GEN-LAST:event_botonEliminarCorreoActionPerformed
 
     private void spinerCorreosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_spinerCorreosPropertyChange
-        
+
     }//GEN-LAST:event_spinerCorreosPropertyChange
 
     private void spinerCorreosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinerCorreosStateChanged
         DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
-        
+
         int numCorreos = Integer.parseInt(spinerCorreos.getValue().toString());
         modelo.setRowCount(numCorreos);
-        
-        for(int i = 0; i < numCorreos; i++) {
-            modelo.setValueAt(i+1, i, 0);
+
+        for (int i = 0; i < numCorreos; i++) {
+            modelo.setValueAt(i + 1, i, 0);
         }
+
+        updateCopiaButtons();
     }//GEN-LAST:event_spinerCorreosStateChanged
 
     private void CorreoAEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CorreoAEliminarActionPerformed
-        
+
     }//GEN-LAST:event_CorreoAEliminarActionPerformed
 
     private void tablaCorreosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tablaCorreosFocusLost
@@ -230,35 +330,53 @@ public class CorreosAEnviar extends javax.swing.JFrame {
 
     private void tablaCorreosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaCorreosKeyPressed
         DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
-        
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             destinatarios.clear();
-            
-            for(int i = 0; i < modelo.getRowCount(); i++) {
-                if(modelo.getValueAt(i, 1) != null && !modelo.getValueAt(i, 1).toString().equals("")) {
-                   destinatarios.add(modelo.getValueAt(i, 1).toString()); 
+
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                if (modelo.getValueAt(i, 1) != null && !modelo.getValueAt(i, 1).toString().equals("")) {
+                    destinatarios.add(modelo.getValueAt(i, 1).toString());
                 }
             }
         }
     }//GEN-LAST:event_tablaCorreosKeyPressed
 
+    private void btnCCOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCCOActionPerformed
+        mainFrame.setEstadoCopia("CCO");
+    }//GEN-LAST:event_btnCCOActionPerformed
+
+    private void btnCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCCActionPerformed
+        mainFrame.setEstadoCopia("CC");
+    }//GEN-LAST:event_btnCCActionPerformed
+
     public void actualizarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tablaCorreos.getModel();
         int numCorreos = Integer.parseInt(spinerCorreos.getValue().toString());
-        
-        for(int i = 0; i < numCorreos; i++) {
-            modelo.setValueAt(i+1, i, 0);
-            
-            if(i < destinatarios.size()) {
+
+        for (int i = 0; i < numCorreos; i++) {
+            modelo.setValueAt(i + 1, i, 0);
+
+            if (i < destinatarios.size()) {
                 modelo.setValueAt(destinatarios.get(i), i, 1);
             } else {
-                    modelo.setValueAt("", i, 1);
+                modelo.setValueAt("", i, 1);
             }
         }
     }
-    
-    
-    
+
+    private void updateCopiaButtons() {
+        int numCorreos = Integer.parseInt(spinerCorreos.getValue().toString());
+        // Habilita los botones solo cuando el spinner tenga 2 o más
+        if (numCorreos >= 2) {
+            btnCC.setEnabled(true);
+            btnCCO.setEnabled(true);
+        } else {
+            btnCC.setEnabled(false);
+            btnCCO.setEnabled(false);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -298,6 +416,9 @@ public class CorreosAEnviar extends javax.swing.JFrame {
     private javax.swing.JTextField CorreoAEliminar;
     private javax.swing.JButton botonEliminarCorreo;
     private javax.swing.JButton botonListoCorreos;
+    private javax.swing.JRadioButton btnCC;
+    private javax.swing.JRadioButton btnCCO;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
