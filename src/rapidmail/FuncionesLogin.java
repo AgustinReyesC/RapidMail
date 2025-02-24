@@ -47,8 +47,6 @@ public class FuncionesLogin {
     
     
     
-    
-    
     public static boolean validarCorreo(String correo) {
         
         if(!correo.contains("@") || !correo.contains(".")){
