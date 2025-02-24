@@ -20,10 +20,14 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -148,5 +152,9 @@ public class ConexionYValidacion {
         } catch (MessagingException ex) {
             Logger.getLogger(ConexionYValidacion.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void conseguirDatosDeEnviados(String usuario, String contra) throws MessagingException, IOException{
+        
     }
 }
