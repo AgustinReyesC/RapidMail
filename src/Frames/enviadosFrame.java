@@ -5,6 +5,7 @@
 package Frames;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.ScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -65,7 +66,6 @@ public class enviadosFrame extends javax.swing.JFrame {
             }
                 
             //asunto
-             System.out.println("string length: " + currArea.getText().length());
             while(currArea.getText().length() < 33){//para que esté alineado
                 currArea.append(" ");
             }
@@ -108,7 +108,7 @@ public class enviadosFrame extends javax.swing.JFrame {
             });
             
             currArea.setEditable(false);
-            
+            currArea.setFont(new Font("Gill Sans Mt", Font.PLAIN, 18));
             //añado el panel
             panelEnviados.add(currArea);
             areasDeMensajes.add(currArea);

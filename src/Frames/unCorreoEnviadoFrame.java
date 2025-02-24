@@ -5,7 +5,11 @@
 package Frames;
 
 import java.awt.Dimension;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,31 +22,48 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
     /**
      * Creates new form unCorreoEnviadoFrame
      */
-    public unCorreoEnviadoFrame(String asunto, String[] destinatarios, Object contenido, boolean esTexto) {
+    public unCorreoEnviadoFrame(String asunto, String[] destinatarios, Object contenido, boolean esTexto) throws MessagingException, IOException {
         initComponents();
         //pongo los que son faciles de poner (destinatario y asunto)
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.destinatariosTable.setRowHeight(50);
+        this.adjuntosTable.setRowHeight(50);
+        
         
         this.asuntoLabel.setText(asunto);
         for (String destinatario : destinatarios) {
             ((DefaultTableModel)destinatariosTable.getModel()).addRow(new Object[1]);
             destinatariosTable.setValueAt(destinatario, destinatariosTable.getRowCount() - 1, 0);
         }
-        destinatariosTable.setPreferredScrollableViewportSize(new Dimension(400, destinatariosTable.getRowCount() * destinatariosTable.getRowHeight()));
-        
         //consigo el cuerpo y el nombre de los adjuntos
+        //codigo para conseguir las partes sacado de: https://old.chuidiang.org/java/herramientas/javamail/leer-correo-javamail.php
         String cuerpo = null;
+        ArrayList<String> adjuntosNombres = new ArrayList<>();
+        
         if (esTexto){
             // mensaje de texto simple
              cuerpo = (String) contenido;
         
         }
         else{
-            
+             // Obtenemos el contenido, que es de tipo MultiPart.
+            Multipart multi;
+            multi = (Multipart)contenido;
+
+            // Extraemos cada una de las partes.
+            for (int j=0;j<multi.getCount();j++)
+            {
+               Part currPart = multi.getBodyPart(j);
+               if (currPart.isMimeType("text/*")){
+                   cuerpo = (String)currPart.getContent();
+               }else{
+                   System.out.println("corre");
+                   adjuntosNombres.add(currPart.getFileName());
+               }
+            }
         }
         
-        ArrayList<String> adjuntosNombres = new ArrayList<>();
-        
+
         this.contenidoTextArea.setText(cuerpo);
         for (String adjunto : adjuntosNombres) {
             ((DefaultTableModel)adjuntosTable.getModel()).addRow(new Object[1]);
@@ -72,6 +93,7 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        destinatariosTable.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
         destinatariosTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -105,15 +127,14 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
 
         contenidoTextArea.setEditable(false);
         contenidoTextArea.setColumns(20);
+        contenidoTextArea.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
         contenidoTextArea.setRows(5);
         jScrollPane2.setViewportView(contenidoTextArea);
 
+        adjuntosTable.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
         adjuntosTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
                 "Adjuntos"
@@ -142,20 +163,20 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(asuntoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
+                        .addComponent(asuntoSoloParaUILabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
+                        .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(asuntoSoloParaUILabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(asuntoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(9, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,13 +185,13 @@ public class unCorreoEnviadoFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(asuntoSoloParaUILabel)
-                        .addGap(7, 7, 7)
-                        .addComponent(asuntoLabel))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(asuntoLabel)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
