@@ -19,8 +19,19 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.internet.InternetAddress;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -125,6 +136,7 @@ public class appCorreo extends javax.swing.JFrame {
         actualizarCorreos = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         tamañoDelArchivo = new javax.swing.JLabel();
+        botonEnviados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
@@ -199,14 +211,14 @@ public class appCorreo extends javax.swing.JFrame {
                             .addComponent(bas2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bas3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                        .addGap(40, 40, 40)
                         .addComponent(botonEnviarArchivos, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addGap(15, 15, 15)
                 .addComponent(botonEnviarArchivos, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,8 +227,9 @@ public class appCorreo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bas2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bas3))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(bas3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -301,6 +314,14 @@ public class appCorreo extends javax.swing.JFrame {
         tamañoDelArchivo.setBackground(new java.awt.Color(204, 204, 204));
         tamañoDelArchivo.setOpaque(true);
 
+        botonEnviados.setFont(new java.awt.Font("Gill Sans MT", 0, 18)); // NOI18N
+        botonEnviados.setText("Enviados");
+        botonEnviados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEnviadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -334,10 +355,6 @@ public class appCorreo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,7 +366,14 @@ public class appCorreo extends javax.swing.JFrame {
                                         .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(botonBorrarTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(8, 8, 8)))))
+                                        .addGap(8, 8, 8))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40))
+                                    .addComponent(botonEnviados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -363,7 +387,9 @@ public class appCorreo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
+                        .addContainerGap()
+                        .addComponent(botonEnviados, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -371,7 +397,7 @@ public class appCorreo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(tamañoDelArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 53, Short.MAX_VALUE))
+                        .addGap(0, 49, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -611,6 +637,56 @@ public class appCorreo extends javax.swing.JFrame {
     private void textDestinatariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textDestinatariosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textDestinatariosActionPerformed
+
+    private void botonEnviadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviadosActionPerformed
+        
+        //código conseguido de https://es.stackoverflow.com/questions/59000/como-leer-los-correos-enviados-desde-gmail-utilizando-javamail?utm_source=chatgpt.com
+        //inicializo las properties para conseguir los correos enviados
+        Properties p = new Properties();
+        p.setProperty("mail.store.protocol", "imaps");
+        Session sesion = Session.getInstance(p);
+        sesion.setDebug(true);//TODO
+        
+        //hago el store
+        Store store = null;
+        try {
+            store = sesion.getStore();
+            store.connect("imap.gmail.com", LOGIN.getRemitente(), LOGIN.getClave());
+        
+        //consigo la carpeta de enviados
+        Folder folder = store.getFolder("[Gmail]/Sent Mail");
+        folder.open(Folder.READ_ONLY);
+        
+        //consigo todos los mensajes
+        Message[] mensajes = folder.getMessages();
+            for (Message m : mensajes) {
+
+                Address[] in = m.getFrom();
+
+                for (Address address : in) {
+                      System.out.println("Email: "+address.toString()+"\n");
+                }
+
+                Multipart mp = (Multipart) m.getContent();
+
+                BodyPart bp = mp.getBodyPart(0);
+
+                System.out.println("Bcc User Name: "+InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC)));
+                System.out.println("SENT DATE: "+m.getSentDate());
+                System.out.println("SUBJECT: "+m.getSubject());
+                System.out.println("Content: "+bp.getContent());
+            }
+        
+        } catch (NoSuchProviderException ex) {
+            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+    }//GEN-LAST:event_botonEnviadosActionPerformed
     
     public void limpiarPanelVisualizacion() {
             panelVisualizacion.removeAll();
@@ -772,6 +848,7 @@ public class appCorreo extends javax.swing.JFrame {
     private javax.swing.JLabel basDestinatario;
     private javax.swing.JLabel basMensaje;
     private javax.swing.JButton botonBorrarTodo;
+    private javax.swing.JButton botonEnviados;
     private javax.swing.JButton botonEnviar;
     private javax.swing.JButton botonEnviarArchivos;
     private javax.swing.JLabel botonMasDestinatarios;
