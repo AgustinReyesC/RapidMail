@@ -40,45 +40,49 @@ import javax.swing.JOptionPane;
  * @author gutyc
  */
 
+//Ahora si se supone que este comentario se tiene que guardar
 
 public class ConexionYValidacion {
         
-        private Properties props;
-        private MimeMessage msg;
-        private Transport mTransport;
-        private Session sesion;
+    private Properties props;
+    private MimeMessage msg;
+    private Session sesion;
+    private Transport mTransport;
         
-        //18 de febrero 2025: Cambié los métodos de static a no static para podes inicializar properties antes
-        // y mantener la sesión abierta.
+    //18 de febrero 2025: Cambié los métodos de static a no static para podes inicializar properties antes
+    // y mantener la sesión abierta.
         
-        public ConexionYValidacion(String remitente, String clave) {    
-            props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port", "465");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.starttls.required", "true");
-            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+    public ConexionYValidacion(String remitente, String clave) {    
             
-            sesion = Session.getDefaultInstance(props);
-            
-            //Se conecta directamente, ya solo faltaría enviar los mensajes
-            try {
-                mTransport = sesion.getTransport("smtp");
-                mTransport.connect(remitente, clave);
+        props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                    
                 
-            } catch (MessagingException ex) {
-                Logger.getLogger(ConexionYValidacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        //LO cambié de getDefaultInstance a getInstance por un tema de multihilos
+        sesion = Session.getInstance(props);
+                 
+                //Lo conecto en el constructor para mantener la sesión abierta. Reduce tiempo de envío.
+        try {    
+            mTransport = sesion.getTransport("smtp");
+            mTransport.connect(remitente, clave);
+        } catch (MessagingException ex) {
+            Logger.getLogger(ConexionYValidacion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+        
         
         
 
-        //18 de febrero 2025: Ahora se crea el mensaje por separado, debido a que la conexion se da instantáneamente.
-        public boolean construirMensaje(String remitente, ArrayList<String> destinatarios, String subject, String content) {
-  
+    //18 de febrero 2025: Ahora se crea el mensaje por separado, debido a que la conexion se da instantáneamente.
+    public boolean construirMensaje(String remitente, ArrayList<String> destinatarios, String subject, String content) {
         msg = new MimeMessage(sesion);
+       
         try {
             msg.setFrom(new InternetAddress(remitente)); 
             
@@ -99,9 +103,8 @@ public class ConexionYValidacion {
         return true;
     }
       
-          
+       
     //Método para generar estructura del archivo si es que tiene archivo o no 
-    //18 de febrero 2025: Ahora tambien verifica que el mensaje esté encriptado con el método creado
     public Multipart armarMensaje(String content) throws MessagingException, IOException {
        
         ArrayList<File> arch = appCorreo.getArchivos();
@@ -114,7 +117,7 @@ public class ConexionYValidacion {
 
         if(!arch.isEmpty()) {
             for(File file: arch) {
-              
+
                 MimeBodyPart agregarArchivos = new MimeBodyPart();
                 agregarArchivos.attachFile(file);
                 
@@ -126,14 +129,10 @@ public class ConexionYValidacion {
     }
     
     
-    
-    
-    
     //18 de febrero 2025: metodo exclusivo para enviar mensaje, para mantener la sesión abierta.    
     public boolean enviarMensaje() {
-            try {           
+            try {  
                 mTransport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO)); 
-                
             } catch (MessagingException ex) {
                 Logger.getLogger(ConexionYValidacion.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
@@ -144,10 +143,12 @@ public class ConexionYValidacion {
     
     
     
+    
     //18 de Febrero 2025: Cree método cerrarConexion, importante para mejorar rapidez.
-    public void cerrarConexion(Transport mTransport) {
+    public void cerrarConexion() {
         try {
             mTransport.close();
+            System.out.println("se cerró la conexión");
         } catch (MessagingException ex) {
             Logger.getLogger(ConexionYValidacion.class.getName()).log(Level.SEVERE, null, ex);
         }
