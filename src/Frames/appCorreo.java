@@ -659,29 +659,10 @@ public class appCorreo extends javax.swing.JFrame {
         
         //consigo todos los mensajes
         Message[] mensajes = folder.getMessages();
-            for (Message m : mensajes) {
-
-                Address[] in = m.getFrom();
-
-                for (Address address : in) {
-                      System.out.println("Email: "+address.toString()+"\n");
-                }
-               try{
-                   //si el enviado tiene attachments
-                    Multipart mp = (Multipart) m.getContent();
-
-                    BodyPart bp = mp.getBodyPart(0);
-                    System.out.println("Content: "+bp.getContent());
-               }catch(java.lang.ClassCastException ex){
-                   //si no
-                   String content = (String) m.getContent();
-                   System.out.println("Content:" + content);
-               }
-                System.out.println("Bcc User Name: "+InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC)));
-                System.out.println("SENT DATE: "+m.getSentDate());
-                System.out.println("SUBJECT: "+m.getSubject());
-                
-            }
+        
+        //creo el otro frame y le doy la info de los mensajes
+        enviadosFrame enviadosF = new enviadosFrame(mensajes);
+        enviadosF.setVisible(true);
         
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(appCorreo.class.getName()).log(Level.SEVERE, null, ex);

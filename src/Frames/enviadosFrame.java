@@ -4,6 +4,24 @@
  */
 package Frames;
 
+import java.awt.BorderLayout;
+import java.awt.ScrollPane;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.internet.InternetAddress;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 /**
  *
  * @author AJMM
@@ -13,10 +31,68 @@ public class enviadosFrame extends javax.swing.JFrame {
     /**
      * Creates new form enviadosFrame
      */
-    public enviadosFrame() {
+    Message[] mensajes;
+    ArrayList<JTextArea> areasDeMensajes;
+    public enviadosFrame(Message[] mensajes) throws IOException {
         initComponents();
-    }
+        this.mensajes =  mensajes;
+        areasDeMensajes = new ArrayList<>();
+        
+        panelEnviados.setLayout(new BoxLayout(panelEnviados, BoxLayout.Y_AXIS));//para que se expandan las textAreas
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //código conseguido de https://es.stackoverflow.com/questions/59000/como-leer-los-correos-enviados-desde-gmail-utilizando-javamail?utm_source=chatgpt.com
+        try{
+         for (Message m : mensajes) {
 
+             //creo el area
+            JTextArea currArea = new JTextArea(10,60);
+            
+            //le pongo los datos
+            try{
+                   //si el enviado tiene attachments
+                Multipart mp = (Multipart) m.getContent();
+
+                BodyPart bp = mp.getBodyPart(0);
+                
+            }catch(java.lang.ClassCastException ex){
+                //si no
+                String content = (String) m.getContent();
+                
+            }
+            
+            //añado pequeña descripción del mensaje
+            currArea.setVisible(true);
+            //destinatario
+            currArea.setText("Para: " +InternetAddress.toString(m.getRecipients(Message.RecipientType.TO)));
+            
+            //asunto
+             System.out.println("string length: " + currArea.getText().length());
+            while(currArea.getText().length() < 33){//para que esté alineado
+                currArea.append(" ");
+            }
+            currArea.append("\t" + m.getSubject());
+            
+            //fecha
+            while(currArea.getText().length() < 66){//para que esté alineado
+                currArea.append(" ");
+            }
+            //codigo para formatear fechas de: https://docs.oracle.com/javase/tutorial/i18n/format/simpleDateFormat.html
+            Date fecha = m.getSentDate();
+            SimpleDateFormat formato = new SimpleDateFormat("d 'de' MMMM 'del' yyyy 'a las' hh:mm a", new Locale("es", "ES"));
+            String fechaEnEspañol = formato.format(fecha);
+            currArea.append("\t" + fechaEnEspañol);
+
+            //añado el panel
+            panelEnviados.add(currArea);
+            areasDeMensajes.add(currArea);
+            }
+        }catch(MessagingException ex){
+           
+        }
+        
+        System.out.println("cuantas Area:" + areasDeMensajes.size());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,17 +102,36 @@ public class enviadosFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelEnviados = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout panelEnviadosLayout = new javax.swing.GroupLayout(panelEnviados);
+        panelEnviados.setLayout(panelEnviadosLayout);
+        panelEnviadosLayout.setHorizontalGroup(
+            panelEnviadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 816, Short.MAX_VALUE)
+        );
+        panelEnviadosLayout.setVerticalGroup(
+            panelEnviadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 361, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelEnviados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelEnviados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -45,38 +140,16 @@ public class enviadosFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(enviadosFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(enviadosFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(enviadosFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(enviadosFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new enviadosFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel panelEnviados;
     // End of variables declaration//GEN-END:variables
 }
+
+//                System.out.println("Bcc User Name: "+InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC)));
+//                System.out.println("SENT DATE: "+m.getSentDate());
+//                System.out.println("SUBJECT: "+m.getSubject());
+//System.out.println("Content: "+bp.getContent());
+//System.out.println("Content:" + content);
+                //creo el texArea de current message y lo añado
