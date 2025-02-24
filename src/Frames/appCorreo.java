@@ -645,7 +645,7 @@ public class appCorreo extends javax.swing.JFrame {
         Properties p = new Properties();
         p.setProperty("mail.store.protocol", "imaps");
         Session sesion = Session.getInstance(p);
-        sesion.setDebug(true);//TODO
+        sesion.setDebug(false);//TODO
         
         //hago el store
         Store store = null;
@@ -666,15 +666,21 @@ public class appCorreo extends javax.swing.JFrame {
                 for (Address address : in) {
                       System.out.println("Email: "+address.toString()+"\n");
                 }
+               try{
+                   //si el enviado tiene attachments
+                    Multipart mp = (Multipart) m.getContent();
 
-                Multipart mp = (Multipart) m.getContent();
-
-                BodyPart bp = mp.getBodyPart(0);
-
+                    BodyPart bp = mp.getBodyPart(0);
+                    System.out.println("Content: "+bp.getContent());
+               }catch(java.lang.ClassCastException ex){
+                   //si no
+                   String content = (String) m.getContent();
+                   System.out.println("Content:" + content);
+               }
                 System.out.println("Bcc User Name: "+InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC)));
                 System.out.println("SENT DATE: "+m.getSentDate());
                 System.out.println("SUBJECT: "+m.getSubject());
-                System.out.println("Content: "+bp.getContent());
+                
             }
         
         } catch (NoSuchProviderException ex) {
